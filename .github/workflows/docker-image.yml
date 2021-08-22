@@ -14,13 +14,13 @@ jobs:
 
     steps:
     - name: Checkout code from Github
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
     
     - name: Build docker image
       run: docker build . --file Dockerfile --tag ruby-http-server$(date +%s)
     
     - name: Push Docker Image
-    - uses: mr-smithers-excellent/docker-build-push@v4
+      uses: mr-smithers-excellent/docker-build-push@v4
       with:
         image: devopsdeepan/ruby-http-server$(date +%s)
         registry: docker.io
@@ -28,7 +28,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Run playbook
-    - uses: dawidd6/action-ansible-playbook@v2
+      uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: deployment.yaml
         directory: ./
