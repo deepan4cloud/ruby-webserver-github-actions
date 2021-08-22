@@ -13,8 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Build the Docker image
+    - name: Checkout code from Github
     - uses: actions/checkout@v2
+    
+    - name: Build docker image
       run: docker build . --file Dockerfile --tag ruby-http-server$(date +%s)
     
     - name: Push Docker Image
