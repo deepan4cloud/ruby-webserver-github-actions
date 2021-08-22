@@ -1,0 +1,60 @@
+- name: MiniKube-Deployment using Ansible Collections
+  hosts: localhost
+  gather_facts: False
+
+  tasks:
+    - name: Create an application Deployment for in Minikube/K8s.
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            labels:
+              app: ruby-http-server
+            name: ruby-http-server
+            namespace: ruby-webserver
+          spec:
+            replicas: 4
+            selector:
+              matchLabels:
+                app: ruby-http-server
+            strategy:
+              rollingUpdate:
+                maxSurge: 25%
+                maxUnavailable: 25%
+              type: RollingUpdate
+            template:
+              metadata:
+                labels:
+                  app: ruby-http-server
+              spec:
+                containers:
+                - image: devopsdeepan/ruby-http-server$(date +%s)
+                  imagePullPolicy: Always
+                  name: ruby-http-server
+                  ports:
+                  - containerPort: 80
+                    protocol: TCP
+                  livenessProbe:
+                    tcpSocket:
+                      port: 80
+                    initialDelaySeconds: 90
+                    periodSeconds: 10
+
+      - name: Create a service for Deployment in Minikube/K8s.
+        kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: ruby-http-server-svc
+            namespace: ruby-webserver
+          spec:
+            type: LoadBalancer
+            ports:
+              - port: 80
+            selector:
+              app: ruby-http-server
+    
