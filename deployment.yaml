@@ -42,19 +42,19 @@
                     initialDelaySeconds: 90
                     periodSeconds: 10
 
-      - name: Create a service for Deployment in Minikube/K8s.
-        kubernetes.core.k8s:
-        state: present
-        definition:
-          apiVersion: v1
-          kind: Service
-          metadata:
-            name: ruby-http-server-svc
-            namespace: ruby-webserver
-          spec:
-            type: LoadBalancer
-            ports:
-              - port: 80
-            selector:
-              app: ruby-http-server
+    - name: Create a service for Deployment in Minikube/K8s.
+      kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: ruby-http-server-svc
+          namespace: ruby-webserver
+        spec:
+          type: LoadBalancer
+          ports:
+            - port: 80
+          selector:
+            app: ruby-http-server
     
