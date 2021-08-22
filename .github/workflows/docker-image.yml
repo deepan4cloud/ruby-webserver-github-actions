@@ -57,8 +57,6 @@ jobs:
       uses: kodermax/kubectl-aws-eks@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        REGISTRY: docker.io
-        REPOSITORY: ruby-http-server$(date +%s)
-        IMAGE_TAG: latest
+        RELEASE_IMAGE: docker.pkg.github.com/devopsdeepan/ruby-http-server$(date +%s)/:${{ github.sha }}
       with:
-        args: set image deployment/$REPOSITORY $REPOSITORY=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          args: set image deployment/docker.pkg.github.com/devopsdeepan/ruby-http-server$(date +%s)/:${{ github.sha }}
