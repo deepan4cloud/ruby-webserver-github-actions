@@ -30,7 +30,7 @@
                   app: ruby-http-server
               spec:
                 containers:
-                - image: devopsdeepan/ruby-http-server$(date +%s)
+                - image: docker.pkg.github.com/devopsdeepan/ruby-http-server$(date +%s)
                   imagePullPolicy: Always
                   name: ruby-http-server
                   ports:
