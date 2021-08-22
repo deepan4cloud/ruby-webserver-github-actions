@@ -53,11 +53,9 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Update deployment
-      uses: ianbelcher/eks-kubectl-action@master
+    - name: Update Deployment
+      uses: steebchen/kubectl@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}       
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-southeast-1
-        cluster_name: exciting-badger-1629631042
-        args: set image --namespace default --record deployment/DEPLOYMENT_NAME DEPLOYMENT_NAME=${{ steps.build.outputs.IMAGE_URL }}
+        args: set image --record ./app-deployment app-deployment=${{ steps.build.outputs.IMAGE_SHA_NAME }}
