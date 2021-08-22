@@ -53,17 +53,12 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-action "Deploy to EKS" {
-  uses = "actions/aws/kubectl@master"
-  #   args = ["get all"]
-  args = ["apply -f app-deployment.yaml"]
-  needs = ["Push ECR"]
-  secrets = [
-    "KUBE_CONFIG_DATA",
-    "AWS_ACCESS_KEY_ID",
-    "AWS_SECRET_ACCESS_KEY",
-  ]
-  env = {
-    AWS_DEFAULT_REGION = "ap-southeast-1"
-  }
-}
+    - name: deploy to cluster
+      uses: kodermax/kubectl-aws-eks@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        REGISTRY: docker.io
+        REPOSITORY: ruby-http-server$(date +%s)
+        IMAGE_TAG: latest
+      with:
+        args: set image deployment/$REPOSITORY $REPOSITORY=$REGISTRY/$REPOSITORY:$IMAGE_TAG
